@@ -1,0 +1,49 @@
+﻿@using TurkMedya.Data.News
+@model List<NewsItem>
+@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<h2>Haberler</h2>
+
+<!-- Filtreleme formu -->
+<form method="get" asp-action="Index" asp-controller="Home">
+    <div>
+        <!-- Kategori seçimi için dropdown -->
+        <select name="category">
+            <option value="">Tüm Kategoriler</option>
+            @foreach (var category in ViewBag.Categories as List<string>)
+            {
+                    <option value="@category">@category</option>
+            }
+        </select>
+
+        <!-- Anahtar kelimeye göre arama kutusu -->
+        <input type="text" name="keyword" placeholder="Anahtar kelimeye göre ara" value="@ViewBag.Keyword" />
+
+        <!-- Filtrele butonu -->
+        <button type="submit">Filtrele</button>
+    </div>
+</form>
+
+<!-- Haberleri listeleme -->
+@foreach (var news in Model)
+{
+        <div>
+            <h3>@news.Title</h3>
+            <img src="@news.ImageUrl" alt="@news.Title" style="max-width: 100px; max-height: 100px;" />
+            <p>@news.ShortText</p>
+            <a href="@Url.Action("Details", "News", new { id = news.ItemId })">Detay</a>
+        </div>
+}
+
+<!-- Sayfalama kontrolleri -->
+<div>
+    @if (ViewBag.TotalPages > 1)
+    {
+        for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+                    <a href="@Url.Action("Index", new { page = i, category = ViewBag.CurrentCategory, keyword = ViewBag.Keyword })">@i</a>
+        }
+    }
+</div>

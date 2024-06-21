@@ -1,0 +1,100 @@
+﻿@using TurkMedya.Data.Detail
+@model Detay
+
+@{
+    ViewData["Title"] = Model.Data.NewsDetail.Title;
+}
+
+<h2>@Model.Data.NewsDetail.Title</h2>
+<p><em>@Model.Data.NewsDetail.PublishDate</em></p>
+
+<!-- Haber resmi gösterimi -->
+@if (!string.IsNullOrEmpty(Model.Data.NewsDetail.ImageUrl))
+{
+    <img src="@Model.Data.NewsDetail.ImageUrl" alt="@Model.Data.NewsDetail.Title" style="max-width: 600px; max-height: 400px;" />
+}
+
+<!-- Haber metni gösterimi -->
+<p>@Html.Raw(Model.Data.NewsDetail.BodyText)</p>
+
+<!-- Fotoğraf galerisi kontrolü -->
+@if (Model.Data.NewsDetail.HasPhotoGallery)
+{
+    <h3>Fotoğraf Galerisi</h3>
+    <!-- Fotoğraf galerisi burada gösterilecek -->
+}
+
+<!-- Video kontrolü -->
+@if (Model.Data.NewsDetail.HasVideo)
+{
+    <h3>Video</h3>
+    <!-- Video burada gösterilecek -->
+}
+
+<h3>İlgili Haberler</h3>
+<!-- İlgili haberler gösterimi -->
+@if (Model.Data.RelatedNews != null)
+{
+    <div>
+        <h4>@Model.Data.RelatedNews.Title</h4>
+        <img src="@Model.Data.RelatedNews.ImageUrl" alt="@Model.Data.RelatedNews.Title" style="max-width: 200px; max-height: 150px;" />
+        <p>@Model.Data.RelatedNews.ShortText</p>
+        <a href="@Url.Action("Details", "News", new { id = Model.Data.RelatedNews.ItemId })">Detay</a>
+    </div>
+}
+
+<h3>Diğer Öğeler</h3>
+<!-- Ekstra öğeler gösterimi -->
+@foreach (var item in Model.Data.ItemList)
+{
+    <div>
+        <h4>@item.Title</h4>
+        @if (!string.IsNullOrEmpty(item.ImageUrl))
+        {
+            <img src="@item.ImageUrl" alt="@item.Title" style="max-width: 200px; max-height: 150px;" />
+        }
+        <p>@item.ShortText</p>
+        @if (!string.IsNullOrEmpty(item.VideoUrl))
+        {
+            <video width="320" height="240" controls>
+                <source src="@item.VideoUrl" type="video/mp4">
+                Tarayıcınız video etiketini desteklemiyor.
+            </video>
+        }
+        <a href="@Url.Action("Details", "News", new { id = item.ItemId })">Detay</a>
+    </div>
+}
+
+<h3>Video</h3>
+<!-- Video gösterimi -->
+@if (Model.Data.Video != null)
+{
+    <div>
+        <h4>@Model.Data.Video.Title</h4>
+        @if (!string.IsNullOrEmpty(Model.Data.Video.ImageUrl))
+        {
+            <img src="@Model.Data.Video.ImageUrl" alt="@Model.Data.Video.Title" style="max-width: 200px; max-height: 150px;" />
+        }
+        <p>@Model.Data.Video.ShortText</p>
+        @if (!string.IsNullOrEmpty(Model.Data.Video.VideoUrl))
+        {
+            <video width="320" height="240" controls>
+                <source src="@Model.Data.Video.VideoUrl" type="video/mp4">
+                Tarayıcınız video etiketini desteklemiyor.
+            </video>
+        }
+    </div>
+}
+
+<h3>Fotoğraf Galerisi</h3>
+<!-- Fotoğraf galerisi gösterimi -->
+@if (Model.Data.PhotoGallery != null)
+{
+    <div>
+        <h4>@Model.Data.PhotoGallery.Title</h4>
+        @if (!string.IsNullOrEmpty(Model.Data.PhotoGallery.ImageUrl))
+        {
+            <img src="@Model.Data.PhotoGallery.ImageUrl" alt="@Model.Data.PhotoGallery.Title" style="max-width: 200px; max-height: 150px;" />
+        }
+    </div>
+}
